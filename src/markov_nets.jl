@@ -18,13 +18,13 @@ function _build_ug_from_factors{T<:Factors.Factor}(
     # Build the UG by linking all edges within a given factor
     for (factor_index, factor) in enumerate(factors)
         for d in factor.dimensions
-            if ~ (factor_index in name_to_factor_indices[d])
-                push!(name_to_factor_indices[d], factor_index)
+            if ~ (factor_index in name_to_factor_indices[d.name])
+                push!(name_to_factor_indices[d.name], factor_index)
             end
         end
         
         for d1 in factor.dimensions, d2 in factor.dimensions        
-            i, j = name_to_index[d1], name_to_index[d2]
+            i, j = name_to_index[d1.name], name_to_index[d2.name]
             if i <j
                 add_edge!(ug, i, j)
             end
@@ -50,7 +50,7 @@ function MarkovNet{T <: Factors.Factor}(factors::AbstractVector{T})
     names = Array{Symbol}[]
     # We need a collection of unique nodes to create the graph
     if isempty(names)
-        names = unique(collect(Base.flatten([factor.dimensions for factor in factors])))
+        names = unique(collect(Base.flatten([Factors.name.(factor.dimensions) for factor in factors])))
     end
 
     for (i, node) in enumerate(names)
@@ -63,8 +63,8 @@ function MarkovNet{T <: Factors.Factor}(factors::AbstractVector{T})
 
 end
 
-Base.get(mn::MarkovNet, i::Int) = mrf.names[i]
-Base.length(mn::MarkovNet) = length(mrf.name_to_index)
+Base.get(mn::MarkovNet, i::Int) = mn.names[i]
+Base.length(mn::MarkovNet) = length(mn.name_to_index)
 
 """
 Returns the list of NodeNames
@@ -82,7 +82,7 @@ Returns the neighbors as a list of NodeNames
 """
 function neighbors(mn::MarkovNet, target::NodeName)
     i = mn.name_to_index[target]
-    NodeName[mn.names[j] for j in neighbors(mrf.ug, i)]
+    NodeName[mn.names[j] for j in neighbors(mn.ug, i)]
 end
 
 """
@@ -160,7 +160,7 @@ end
 
 
 function plot(mn::MarkovNet)
-    plot(mn.ug, AbstractString[string(s) for s in mrf.names])
+    plot(mn.ug, AbstractString[string(s) for s in mn.names])
 end
 
 
