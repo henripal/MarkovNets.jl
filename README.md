@@ -9,7 +9,7 @@ A common interface for BayesNets and MarkovNets can be found at
 [ProbabilisticGraphicalModels.jl](https://github.com/sisl/ProbabilisticGraphicalModels.jl).
 
 Examples and usage can be found in the
-[documentation]((http://nbviewer.ipython.org/github/henripal/MarkovNets.jl/blob/master/doc/MarkovNets.ipynb)
+[documentation](http://nbviewer.ipython.org/github/henripal/MarkovNets.jl/blob/master/doc/MarkovNets.ipynb)
 
 [![Build Status](https://travis-ci.org/henripal/MarkovNets.jl.svg?branch=master)](https://travis-ci.org/henripal/MarkovNets.jl)
 
